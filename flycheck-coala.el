@@ -29,6 +29,7 @@
 
 
 ;;; Code:
+(require 'flycheck)
 (require 'json)
 
 (defun flycheck-coala-parse-json (output checker buffer)
