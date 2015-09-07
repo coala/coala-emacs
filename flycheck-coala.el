@@ -32,6 +32,14 @@
 (require 'flycheck)
 (require 'json)
 
+(defun flycheck-coala-severity-to-level (severity)
+  "Convert the SEVERITY from coala to a flycheck level type."
+  (pcase severity
+    (1 'info) ; INFO in coala
+    (2 'warning) ; NORMAL in coala
+    (3 'error)  ; MAJOR in coala
+    (_ 'info)))
+
 (defun flycheck-coala-parse-json (output checker buffer)
   "Parse coala-json errors from OUTPUT via CHECKER for BUFFER."
   (let ((errors)
@@ -46,7 +54,8 @@
                                          :filename (cdr (assoc 'file err))
                                          :line (cdr (assoc 'line_nr err))
                                          :message (cdr (assoc 'message err))
-                                         :level 'info))))
+                                         :level (flycheck-coala-severity-to-level
+                                                 (cdr (assoc 'severity err)))))))
     errors))
 
 (flycheck-define-checker coala
