@@ -40,7 +40,6 @@
                                          (json-read-from-string output)))))))
     (dotimes (i (length results))
       (let ((err (elt results i)))
-        (message (format "%S" err))
         (add-to-list 'errors
                      (flycheck-error-new :buffer buffer
                                          :checker checker
@@ -48,7 +47,6 @@
                                          :line (cdr (assoc 'line_nr err))
                                          :message (cdr (assoc 'message err))
                                          :level 'info))))
-    (message (format "%S" errors))
     errors))
 
 (flycheck-define-checker coala
