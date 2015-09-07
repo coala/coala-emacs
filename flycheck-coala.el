@@ -58,8 +58,6 @@ See URL `http://coala-analyzer.org/'."
   :command ("coala-json" "--find-config" "-f" source)
   :error-parser flycheck-coala-parse-json)
 
-
-
 (provide 'flycheck-coala)
 
 ;;; flycheck-coala.el ends here
