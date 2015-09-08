@@ -43,19 +43,21 @@
 (defun flycheck-coala-parse-json (output checker buffer)
   "Parse coala-json errors from OUTPUT via CHECKER for BUFFER."
   (let ((errors)
-        (results (cdr (assoc 'default
-                             (cdr (assoc 'results
-                                         (json-read-from-string output)))))))
-    (dotimes (i (length results))
-      (let ((err (elt results i)))
-        (add-to-list 'errors
-                     (flycheck-error-new :buffer buffer
-                                         :checker checker
-                                         :filename (cdr (assoc 'file err))
-                                         :line (cdr (assoc 'line_nr err))
-                                         :message (cdr (assoc 'message err))
-                                         :level (flycheck-coala-severity-to-level
-                                                 (cdr (assoc 'severity err)))))))
+        (results (cdr (assoc 'results
+                             (let ((json-array-type 'list))
+                               (json-read-from-string output))))))
+    ;; iterate through members of results since each is from a separate section
+    ;; of the configuration
+    (dolist (section results)
+      (dolist (err (cdr section))
+        (push (flycheck-error-new
+               :buffer buffer
+               :checker checker
+               :filename (cdr (assoc 'file err))
+               :line (cdr (assoc 'line_nr err))
+               :message (format "[%s]: %s" (car section) (cdr (assoc 'message err)))
+               :level (flycheck-coala-severity-to-level
+                       (cdr (assoc 'severity err)))) errors)))
     errors))
 
 (flycheck-define-checker coala
