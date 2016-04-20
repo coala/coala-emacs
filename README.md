@@ -6,3 +6,8 @@ Integrate [coala](http://coala-analyzer.org) with
 
 Currently this has only been tested with Emacs 24.4 and a very recent version of
 flycheck.
+
+License
+-------
+
+This one is licensed GPLv3.
