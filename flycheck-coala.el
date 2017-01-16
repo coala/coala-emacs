@@ -64,7 +64,7 @@
   "A checker using coala.
 
 See URL `http://coala-analyzer.org/'."
-  :command ("coala", "--json" "--find-config" "--limit-files" source)
+  :command ("coala" "--json" "--find-config" "--limit-files" source)
   :error-parser flycheck-coala-parse-json)
 
 (provide 'flycheck-coala)
