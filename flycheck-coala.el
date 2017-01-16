@@ -63,7 +63,7 @@
 (flycheck-define-checker coala
   "A checker using coala.
 
-See URL `http://coala-analyzer.org/'."
+See URL `https://coala.io'."
   :command ("coala" "--json" "--find-config" "--limit-files" source)
   :error-parser flycheck-coala-parse-json)
 
