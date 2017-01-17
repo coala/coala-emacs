@@ -4,8 +4,8 @@
 ;;
 ;; Author: Alex Murray <murray.alex@gmail.com>
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
-;; URL: https://github.com/alexmurray/flycheck-coala
-;; Version: 0.1
+;; URL: https://github.com/coala/coala-emacs
+;; Version: 0.9.0
 ;; Package-Requires: ((flycheck "0.24") (emacs "24.4"))
 
 ;; This file is not part of GNU Emacs.
