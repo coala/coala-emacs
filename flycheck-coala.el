@@ -6,7 +6,7 @@
 ;; Maintainer: Alex Murray <murray.alex@gmail.com>
 ;; URL: https://github.com/coala/coala-emacs
 ;; Version: 0.9.0
-;; Package-Requires: ((flycheck "0.24") (emacs "24.4"))
+;; Package-Requires: ((flycheck "0.24"))
 
 ;; This file is not part of GNU Emacs.
 
@@ -50,22 +50,71 @@
     ;; of the configuration
     (dolist (section results)
       (dolist (err (cdr section))
-        (push (flycheck-error-new
-               :buffer buffer
-               :checker checker
-               :filename (cdr (assoc 'file err))
-               :line (cdr (assoc 'line_nr err))
-               :message (format "[%s]: %s" (car section) (cdr (assoc 'message err)))
-               :level (flycheck-coala-severity-to-level
-                       (cdr (assoc 'severity err)))) errors)))
+        (let ((err-end (car (car (cdr (assoc 'affected_code err))))))
+          (push (flycheck-error-new
+                 :buffer buffer
+                 :checker checker
+                 :filename (cdr (assoc 'file err-end))
+                 :line (cdr (assoc 'line err-end))
+                 :message (format "[%s]: %s" (car section) (cdr (assoc 'message err)))
+                 :level (flycheck-coala-severity-to-level
+                         (cdr (assoc 'severity err)))) errors))))
     errors))
 
 (flycheck-define-checker coala
   "A checker using coala.
-
 See URL `https://coala.io'."
-  :command ("coala" "--json" "--find-config" "--limit-files" source)
-  :error-parser flycheck-coala-parse-json)
+  :command ("coala" "--json" "--find-config" "--files" source)
+  :error-parser flycheck-coala-parse-json
+  :modes (c-mode
+          csharp-mode
+          c++-mode
+          cmake-mode
+          css-mode
+          csv-mode
+          cuda-mode
+          coffee-mode
+          dart-mode
+          dockerfile-mode
+          fortran-mode
+          go-mode
+          html-mode
+          haskell-mode
+          json-mode
+          js-mode js-jsx-mode js2-mode js2-jsx-mode js3-mode rjsx-mode
+          java-mode
+          jinja2-mode
+          julia-mode
+          lua-mode
+          markdown-mode
+          matlab-mode
+          objc-mode
+          octave-mode
+          opencl-mode
+          org-mode
+          php-mode php+-mode
+          plsql-mode
+          perl-mode cperl-mode
+          po-mode
+          puppet-mode
+          python-mode pip-requirements-mode
+          R-mode
+          rst-mode
+          ruby-mode enh-ruby-mode
+          scss-mode
+          sh-mode
+          sql-mode
+          scala-mode
+          swift-mode swift3-mode
+          latex-mode plain-tex-mode
+          text-mode
+          typescript-mode
+          vhdl-mode
+          verilog-mode
+          xml-mode nxml-mode
+          yaml-mode))
+
+(add-to-list 'flycheck-checkers 'coala)
 
 (provide 'flycheck-coala)
 
