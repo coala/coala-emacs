@@ -1,0 +1,19 @@
+language: python
+sudo: no
+python:
+  - 3.4
+  - 3.5
+  - 3.6
+env:
+  - EVM_EMACS=emacs-24.4-travis
+  - EVM_EMACS=emacs-24.5-travis
+  - EVM_EMACS=emacs-25.1-travis
+  - EVM_EMACS=emacs-25.2-travis
+before_install:
+  - curl -fsSkL https://gist.github.com/rejeep/ebcd57c3af83b049833b/raw > travis.sh && source ./travis.sh
+  - evm install $EVM_EMACS --use --skip
+  - cask
+install:
+  - pip install -r requirements.txt
+script:
+  - PYTHONPATH="`pwd`" cask exec ert-runner

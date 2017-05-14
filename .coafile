@@ -1,0 +1,8 @@
+[Default]
+enabled = True
+
+[commit]
+bears = GitCommitBear
+
+[python]
+bears = PEP8Bear

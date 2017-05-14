@@ -1,0 +1,3 @@
+coala
+coala-bears
+pyflakes~=1.4.0
