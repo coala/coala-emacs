@@ -30,42 +30,14 @@
 
 ;;; Code:
 (require 'flycheck)
-(require 'json)
-
-(defun flycheck-coala-severity-to-level (severity)
-  "Convert the SEVERITY from coala to a flycheck level type."
-  (pcase severity
-    (1 'info) ; INFO in coala
-    (2 'warning) ; NORMAL in coala
-    (3 'error)  ; MAJOR in coala
-    (_ 'info)))
-
-(defun flycheck-coala-parse-json (output checker buffer)
-  "Parse coala-json errors from OUTPUT via CHECKER for BUFFER."
-  (let ((errors)
-        (results (cdr (assoc 'results
-                             (let ((json-array-type 'list))
-                               (json-read-from-string output))))))
-    ;; iterate through members of results since each is from a separate section
-    ;; of the configuration
-    (dolist (section results)
-      (dolist (err (cdr section))
-        (let ((err-end (car (car (cdr (assoc 'affected_code err))))))
-          (push (flycheck-error-new
-                 :buffer buffer
-                 :checker checker
-                 :filename (cdr (assoc 'file err-end))
-                 :line (cdr (assoc 'line err-end))
-                 :message (format "[%s]: %s" (car section) (cdr (assoc 'message err)))
-                 :level (flycheck-coala-severity-to-level
-                         (cdr (assoc 'severity err)))) errors))))
-    errors))
 
 (flycheck-define-checker coala
   "A checker using coala.
 See URL `https://coala.io'."
-  :command ("coala" "--json" "--find-config" "--files" source)
-  :error-parser flycheck-coala-parse-json
+  :command ("coala" "--format" "{line}:{column}:{severity_str}:{message}" "--find-config" "--files" source)
+  :error-patterns  ((error (or "None" line) ":" (or "None" column) ":MAJOR:" (message))
+                    (warning (or "None" line) ":" (or "None" column) ":NORMAL:" (message))
+                    (info (or "None" line) ":" (or "None" column) ":INFO:" (message)))
   :modes (c-mode
           csharp-mode
           c++-mode
