@@ -17,3 +17,8 @@ install:
   - pip install -r requirements.txt
 script:
   - PYTHONPATH="`pwd`" cask exec ert-runner
+
+notifications:
+  email: false
+  webhooks: https://www.travisbuddy.com/
+  on_success: never
