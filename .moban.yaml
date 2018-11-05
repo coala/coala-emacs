@@ -10,3 +10,4 @@ configuration:
   configuration_dir: ../coala-mobans/
 targets:
   - .gitignore: coala-gitignore.jj2
+  - .editorconfig: .editorconfig.jj2
