@@ -1,8 +1,8 @@
-[Default]
+[all]
 enabled = True
 
-[commit]
+[all.commit]
 bears = GitCommitBear
 
-[python]
+[all.python]
 bears = PEP8Bear
